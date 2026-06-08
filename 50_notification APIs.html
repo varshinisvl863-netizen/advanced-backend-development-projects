@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notification APIs</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:450px;
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+textarea{
+    width:100%;
+    height:120px;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    resize:none;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#6c63ff;
+    color:#fff;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#564fd8;
+}
+
+#result{
+    margin-top:20px;
+    padding:15px;
+    background:#f8f9fa;
+    border-radius:5px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Create Notification API</h2>
+
+    <input type="text" id="title" placeholder="Notification Title">
+
+    <textarea id="message" placeholder="Enter Notification Message"></textarea>
+
+    <button onclick="sendNotification()">Send Notification</button>
+
+    <div id="result">
+        Notification status will appear here.
+    </div>
+</div>
+
+<script>
+async function sendNotification(){
+
+    const title = document.getElementById("title").value;
+    const message = document.getElementById("message").value;
+
+    try{
+
+        const response = await fetch(
+            "http://localhost:3000/api/notifications",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    title:title,
+                    message:message
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        document.getElementById("result").innerHTML =
+        "<strong>Notification Sent:</strong><br>" +
+        JSON.stringify(data, null, 2);
+
+    }catch(error){
+
+        document.getElementById("result").innerHTML =
+        "<strong>Error:</strong><br>" +
+        error.message;
+    }
+}
+</script>
+
+</body>
+</html>
